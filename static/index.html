@@ -1,0 +1,3203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#080808"
+    >
+
+    <meta
+        name="description"
+        content="ClipForge - YouTube video clipping and media toolkit"
+    >
+
+    <title>ClipForge</title>
+
+    <link
+        rel="icon"
+        href="/assets/favicon.png"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
+
+    <header>
+
+        <div class="logo">
+
+            <div class="logo-mark">
+                CF
+            </div>
+
+            <span>
+                ClipForge
+            </span>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <div class="badge">
+                media toolkit
+            </div>
+
+            <button
+                id="menuButton"
+                class="menu-button"
+                type="button"
+                aria-label="More features"
+                aria-controls="drawer"
+                aria-expanded="false"
+            >
+
+                <div class="menu-lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================================================= -->
+    <!-- DRAWER -->
+    <!-- ================================================= -->
+
+    <aside
+        id="drawer"
+        class="drawer"
+        aria-hidden="true"
+    >
+
+        <div class="drawer-head">
+
+            <div class="drawer-title">
+                Small useful things
+            </div>
+
+            <button
+                id="closeDrawer"
+                class="close"
+                type="button"
+                aria-label="Close menu"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="extra-grid">
+
+            <button
+                class="extra"
+                id="copyUrlBtn"
+                type="button"
+            >
+                <strong>
+                    Copy URL
+                </strong>
+
+                Copy current video link
+            </button>
+
+
+            <button
+                class="extra"
+                id="resetBtn"
+                type="button"
+            >
+                <strong>
+                    Reset clip
+                </strong>
+
+                Select the full video
+            </button>
+
+
+            <button
+                class="extra"
+                id="openYoutubeBtn"
+                type="button"
+            >
+                <strong>
+                    Open YouTube
+                </strong>
+
+                Open original video
+            </button>
+
+
+            <button
+                class="extra"
+                id="clearBtn"
+                type="button"
+            >
+                <strong>
+                    Clear
+                </strong>
+
+                Start a new video
+            </button>
+
+        </div>
+
+
+        <div class="feature-message">
+            Tip: use ← / → to fine-tune the active clip
+            point and Space to preview the selection.
+        </div>
+
+    </aside>
+
+
+    <!-- ================================================= -->
+    <!-- HERO -->
+    <!-- ================================================= -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-kicker">
+                PUBLIC • FAST • SIMPLE
+            </div>
+
+
+            <h1>
+                Your video.<br>
+                <span>Your cut.</span>
+            </h1>
+
+
+            <p>
+                One clean workspace for clips, videos,
+                audio, thumbnails and captions.
+            </p>
+
+
+            <div class="url-box">
+
+                <div class="url-icon">
+                    ↗
+                </div>
+
+
+                <input
+                    id="url"
+                    type="url"
+                    placeholder="Paste YouTube URL..."
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-label="YouTube URL"
+                >
+
+
+                <button
+                    id="loadBtn"
+                    type="button"
+                >
+                    Load
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- WORKSPACE -->
+        <!-- ================================================= -->
+
+        <section
+            id="workspace"
+            class="workspace"
+        >
+
+            <!-- VIDEO CARD -->
+
+            <div class="video-card">
+
+                <div class="video-area">
+
+                    <iframe
+                        id="player"
+                        title="YouTube video preview"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowfullscreen
+                    ></iframe>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <img
+                        id="thumbnail"
+                        class="thumbnail"
+                        alt=""
+                    >
+
+
+                    <div class="video-info">
+
+                        <div
+                            id="videoTitle"
+                            class="video-title"
+                        >
+                            —
+                        </div>
+
+
+                        <div
+                            id="videoChannel"
+                            class="video-channel"
+                        >
+                            —
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="duration"
+                        class="duration"
+                    >
+                        00:00
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TOOLBAR -->
+
+            <div class="tools">
+
+                <button
+                    class="tool active"
+                    type="button"
+                    data-mode="trim"
+                >
+                    <span class="icon">✂</span>
+                    <span>Clip</span>
+                </button>
+
+
+                <button
+                    class="tool"
+                    type="button"
+                    data-mode="video"
+                >
+                    <span class="icon">↓</span>
+                    <span>Video</span>
+                </button>
+
+
+                <button
+                    class="tool"
+                    type="button"
+                    data-mode="audio"
+                >
+                    <span class="icon">♫</span>
+                    <span>Audio</span>
+                </button>
+
+
+                <button
+                    class="tool"
+                    type="button"
+                    data-mode="thumbnail"
+                >
+                    <span class="icon">▣</span>
+                    <span>Thumbnail</span>
+                </button>
+
+
+                <button
+                    class="tool"
+                    type="button"
+                    data-mode="captions"
+                >
+                    <span class="icon">CC</span>
+                    <span>Captions</span>
+                </button>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- CONTROLS -->
+            <!-- ================================================= -->
+
+            <div class="controls">
+
+
+                <!-- CLIP -->
+
+                <div
+                    id="trimControls"
+                    class="control-panel"
+                >
+
+                    <div class="control-title">
+
+                        <div>
+                            <span>
+                                Clip range
+                            </span>
+
+                            <div class="control-subtitle">
+                                Choose the exact section to download
+                            </div>
+                        </div>
+
+                        <small id="selectionLength">
+                            00:00
+                        </small>
+
+                    </div>
+
+
+                    <div class="range">
+
+                        <div class="track"></div>
+
+                        <div
+                            id="selectedTrack"
+                            class="selected-track"
+                        ></div>
+
+
+                        <input
+                            id="startRange"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            value="0"
+                            aria-label="Clip start"
+                        >
+
+
+                        <input
+                            id="endRange"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            value="1"
+                            aria-label="Clip end"
+                        >
+
+                    </div>
+
+
+                    <div class="time-grid">
+
+
+                        <div>
+
+                            <div class="time-input">
+
+                                <label for="startTime">
+                                    START
+                                </label>
+
+                                <input
+                                    id="startTime"
+                                    value="00:00"
+                                    inputmode="numeric"
+                                    aria-label="Start time"
+                                >
+
+                            </div>
+
+
+                            <div class="micro-buttons">
+
+                                <button
+                                    type="button"
+                                    data-target="start"
+                                    data-delta="-5"
+                                >
+                                    −5s
+                                </button>
+
+                                <button
+                                    type="button"
+                                    data-target="start"
+                                    data-delta="-1"
+                                >
+                                    −1s
+                                </button>
+
+                                <button
+                                    type="button"
+                                    data-target="start"
+                                    data-delta="1"
+                                >
+                                    +1s
+                                </button>
+
+                                <button
+                                    type="button"
+                                    data-target="start"
+                                    data-delta="5"
+                                >
+                                    +5s
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="time-input">
+
+                                <label for="endTime">
+                                    END
+                                </label>
+
+                                <input
+                                    id="endTime"
+                                    value="00:00"
+                                    inputmode="numeric"
+                                    aria-label="End time"
+                                >
+
+                            </div>
+
+
+                            <div class="micro-buttons">
+
+                                <button
+                                    type="button"
+                                    data-target="end"
+                                    data-delta="-5"
+                                >
+                                    −5s
+                                </button>
+
+                                <button
+                                    type="button"
+                                    data-target="end"
+                                    data-delta="-1"
+                                >
+                                    −1s
+                                </button>
+
+                                <button
+                                    type="button"
+                                    data-target="end"
+                                    data-delta="1"
+                                >
+                                    +1s
+                                </button>
+
+                                <button
+                                    type="button"
+                                    data-target="end"
+                                    data-delta="5"
+                                >
+                                    +5s
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="subsection">
+
+                        <div class="subsection-title">
+                            Clip quality
+                        </div>
+
+
+                        <div class="option-grid">
+
+                            <button
+                                class="option selected"
+                                type="button"
+                                data-quality="best"
+                            >
+                                <strong>Best</strong>
+                                <small>Maximum</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-quality="1080"
+                            >
+                                <strong>1080p</strong>
+                                <small>Full HD</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-quality="720"
+                            >
+                                <strong>720p</strong>
+                                <small>HD</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-quality="480"
+                            >
+                                <strong>480p</strong>
+                                <small>SD</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-quality="360"
+                            >
+                                <strong>360p</strong>
+                                <small>Small</small>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="subsection">
+
+                        <div class="subsection-title">
+                            Clip format
+                        </div>
+
+
+                        <div class="option-grid">
+
+                            <button
+                                class="option selected"
+                                type="button"
+                                data-video-format="mp4"
+                            >
+                                <strong>MP4</strong>
+                                <small>Universal</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-video-format="mkv"
+                            >
+                                <strong>MKV</strong>
+                                <small>Flexible</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-video-format="webm"
+                            >
+                                <strong>WebM</strong>
+                                <small>Web</small>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bottom">
+
+                        <button
+                            id="previewBtn"
+                            class="secondary"
+                            type="button"
+                        >
+                            ▶ Preview
+                        </button>
+
+
+                        <button
+                            id="clipBtn"
+                            class="primary red"
+                            type="button"
+                        >
+                            Cut & Download
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VIDEO -->
+
+                <div
+                    id="videoControls"
+                    class="control-panel hidden"
+                >
+
+                    <div class="control-title">
+
+                        <div>
+                            <span>
+                                Full video
+                            </span>
+
+                            <div class="control-subtitle">
+                                Download the complete video
+                            </div>
+                        </div>
+
+                        <small>
+                            Quality + format
+                        </small>
+
+                    </div>
+
+
+                    <div class="option-grid">
+
+                        <button
+                            class="option selected"
+                            type="button"
+                            data-full-quality="best"
+                        >
+                            <strong>Best</strong>
+                            <small>Maximum</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-full-quality="1080"
+                        >
+                            <strong>1080p</strong>
+                            <small>Full HD</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-full-quality="720"
+                        >
+                            <strong>720p</strong>
+                            <small>HD</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-full-quality="480"
+                        >
+                            <strong>480p</strong>
+                            <small>SD</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-full-quality="360"
+                        >
+                            <strong>360p</strong>
+                            <small>Small</small>
+                        </button>
+
+                    </div>
+
+
+                    <div class="subsection">
+
+                        <div class="subsection-title">
+                            Format
+                        </div>
+
+
+                        <div class="option-grid">
+
+                            <button
+                                class="option selected"
+                                type="button"
+                                data-full-format="mp4"
+                            >
+                                <strong>MP4</strong>
+                                <small>Universal</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-full-format="mkv"
+                            >
+                                <strong>MKV</strong>
+                                <small>Flexible</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-full-format="webm"
+                            >
+                                <strong>WebM</strong>
+                                <small>Web</small>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bottom">
+
+                        <button
+                            id="videoDownloadBtn"
+                            class="primary"
+                            type="button"
+                        >
+                            Download video
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AUDIO -->
+
+                <div
+                    id="audioControls"
+                    class="control-panel hidden"
+                >
+
+                    <div class="control-title">
+
+                        <div>
+                            <span>
+                                Audio
+                            </span>
+
+                            <div class="control-subtitle">
+                                Extract audio from the selected clip
+                            </div>
+                        </div>
+
+                        <small>
+                            Selected clip range
+                        </small>
+
+                    </div>
+
+
+                    <div class="option-grid">
+
+                        <button
+                            class="option selected"
+                            type="button"
+                            data-audio="mp3"
+                        >
+                            <strong>MP3</strong>
+                            <small>Universal</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-audio="m4a"
+                        >
+                            <strong>M4A</strong>
+                            <small>Efficient</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-audio="opus"
+                        >
+                            <strong>Opus</strong>
+                            <small>Compact</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-audio="wav"
+                        >
+                            <strong>WAV</strong>
+                            <small>PCM</small>
+                        </button>
+
+                    </div>
+
+
+                    <div class="bottom">
+
+                        <button
+                            id="audioDownloadBtn"
+                            class="primary"
+                            type="button"
+                        >
+                            Extract audio
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- THUMBNAIL -->
+
+                <div
+                    id="thumbnailControls"
+                    class="control-panel hidden"
+                >
+
+                    <div class="control-title">
+
+                        <div>
+                            <span>
+                                Thumbnail
+                            </span>
+
+                            <div class="control-subtitle">
+                                Save the video's thumbnail
+                            </div>
+                        </div>
+
+                        <small>
+                            Choose output format
+                        </small>
+
+                    </div>
+
+
+                    <div class="option-grid">
+
+                        <button
+                            class="option selected"
+                            type="button"
+                            data-thumb-format="jpg"
+                        >
+                            <strong>JPG</strong>
+                            <small>Small</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-thumb-format="png"
+                        >
+                            <strong>PNG</strong>
+                            <small>Lossless</small>
+                        </button>
+
+                        <button
+                            class="option"
+                            type="button"
+                            data-thumb-format="webp"
+                        >
+                            <strong>WebP</strong>
+                            <small>Modern</small>
+                        </button>
+
+                    </div>
+
+
+                    <div class="bottom">
+
+                        <button
+                            id="thumbnailBtn"
+                            class="primary"
+                            type="button"
+                        >
+                            Download thumbnail
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CAPTIONS -->
+
+                <div
+                    id="captionsControls"
+                    class="control-panel hidden"
+                >
+
+                    <div class="control-title">
+
+                        <div>
+                            <span>
+                                Captions
+                            </span>
+
+                            <div class="control-subtitle">
+                                Download available subtitle tracks
+                            </div>
+                        </div>
+
+                        <small>
+                            Language + format
+                        </small>
+
+                    </div>
+
+
+                    <select
+                        id="captionLanguage"
+                        aria-label="Caption language"
+                    ></select>
+
+
+                    <div class="subsection">
+
+                        <div class="subsection-title">
+                            File format
+                        </div>
+
+
+                        <div class="option-grid">
+
+                            <button
+                                class="option selected"
+                                type="button"
+                                data-caption-format="srt"
+                            >
+                                <strong>SRT</strong>
+                                <small>Recommended</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-caption-format="vtt"
+                            >
+                                <strong>VTT</strong>
+                                <small>Web</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-caption-format="ass"
+                            >
+                                <strong>ASS</strong>
+                                <small>Styled</small>
+                            </button>
+
+                            <button
+                                class="option"
+                                type="button"
+                                data-caption-format="lrc"
+                            >
+                                <strong>LRC</strong>
+                                <small>Lyrics timing</small>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="bottom">
+
+                        <button
+                            id="captionBtn"
+                            class="primary"
+                            type="button"
+                        >
+                            Download captions
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- STATUS -->
+            <!-- ================================================= -->
+
+            <div class="status">
+
+                <div class="status-top">
+
+                    <div id="statusText">
+                        Ready
+                    </div>
+
+                    <div
+                        id="statusPercent"
+                        class="status-percent"
+                    >
+                        0%
+                    </div>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div
+                        id="progressBar"
+                        class="progress-bar"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- META -->
+            <!-- ================================================= -->
+
+            <div class="meta-strip">
+
+                <div
+                    id="resolutionMeta"
+                    class="meta"
+                >
+                    —
+                </div>
+
+
+                <div
+                    id="captionMeta"
+                    class="meta"
+                >
+                    —
+                </div>
+
+
+                <div
+                    id="liveMeta"
+                    class="meta"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- MESSAGES -->
+            <!-- ================================================= -->
+
+            <div
+                id="notice"
+                class="notice"
+                hidden
+            >
+                <span id="noticeText"></span>
+            </div>
+
+
+            <div
+                id="error"
+                class="error"
+                hidden
+            >
+                <span id="errorText"></span>
+            </div>
+
+
+            <div
+                id="success"
+                class="success"
+                hidden
+            >
+                <span id="successText"></span>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================================= -->
+    <!-- FOOTER -->
+    <!-- ================================================= -->
+
+    <footer>
+
+        <span>
+            ClipForge processes media through its configured server.
+        </span>
+
+        <span class="notice-dot">
+            •
+        </span>
+
+        <span>
+            Only download content you have the right to use.
+        </span>
+
+    </footer>
+
+</div>
+
+
+<script>
+(() => {
+    "use strict";
+
+
+    /*
+     * =====================================================
+     * API CONFIGURATION
+     * =====================================================
+     *
+     * ClipForge is now deployed as one application on Render.
+     *
+     * The frontend and backend are served from the same domain,
+     * so API requests use relative paths such as:
+     *
+     *     /api/info
+     *     /api/clip
+     *     /api/audio
+     *
+     * Keeping this empty avoids hard-coding a Cloudflare
+     * Quick Tunnel or another temporary API URL.
+     */
+
+    const API_BASE = "";
+
+
+    // =====================================================
+    // ELEMENTS
+    // =====================================================
+
+    const $ = (id) => document.getElementById(id);
+
+    const urlInput = $("url");
+    const loadBtn = $("loadBtn");
+
+    const workspace = $("workspace");
+
+    const player = $("player");
+    const thumbnail = $("thumbnail");
+    const videoTitle = $("videoTitle");
+    const videoChannel = $("videoChannel");
+    const durationEl = $("duration");
+
+    const startRange = $("startRange");
+    const endRange = $("endRange");
+
+    const startTime = $("startTime");
+    const endTime = $("endTime");
+
+    const selectionLength = $("selectionLength");
+    const selectedTrack = $("selectedTrack");
+
+    const statusText = $("statusText");
+    const statusPercent = $("statusPercent");
+    const progressBar = $("progressBar");
+
+    const resolutionMeta = $("resolutionMeta");
+    const captionMeta = $("captionMeta");
+    const liveMeta = $("liveMeta");
+
+    const notice = $("notice");
+    const noticeText = $("noticeText");
+
+    const error = $("error");
+    const errorText = $("errorText");
+
+    const success = $("success");
+    const successText = $("successText");
+
+    const captionLanguage = $("captionLanguage");
+
+    const drawer = $("drawer");
+    const menuButton = $("menuButton");
+    const closeDrawer = $("closeDrawer");
+
+
+    // =====================================================
+    // STATE
+    // =====================================================
+
+    let currentVideo = null;
+
+    let duration = 0;
+
+    let currentMode = "trim";
+
+    let selectedQuality = "best";
+    let selectedVideoFormat = "mp4";
+    let selectedAudioFormat = "mp3";
+    let selectedThumbnailFormat = "jpg";
+    let selectedCaptionFormat = "srt";
+
+    let busy = false;
+
+
+    // =====================================================
+    // API URL
+    // =====================================================
+
+    function apiUrl(path, params = {}) {
+
+        const cleanPath =
+            path.startsWith("/")
+                ? path
+                : `/${path}`;
+
+        const url =
+            new URL(
+                `${API_BASE}${cleanPath}`,
+                window.location.origin
+            );
+
+        Object.entries(params).forEach(
+            ([key, value]) => {
+
+                if (
+                    value !== undefined &&
+                    value !== null
+                ) {
+                    url.searchParams.set(
+                        key,
+                        value
+                    );
+                }
+
+            }
+        );
+
+        return url.toString();
+    }
+
+
+    // =====================================================
+    // UI
+    // =====================================================
+
+    function hideMessages() {
+
+        notice.hidden = true;
+        error.hidden = true;
+        success.hidden = true;
+
+    }
+
+
+    function showNotice(message) {
+
+        hideMessages();
+
+        noticeText.textContent =
+            message;
+
+        notice.hidden = false;
+
+    }
+
+
+    function showError(message) {
+
+        hideMessages();
+
+        errorText.textContent =
+            message;
+
+        error.hidden = false;
+
+    }
+
+
+    function showSuccess(message) {
+
+        hideMessages();
+
+        successText.textContent =
+            message;
+
+        success.hidden = false;
+
+    }
+
+
+    function setStatus(
+        message,
+        percent = 0
+    ) {
+
+        statusText.textContent =
+            message;
+
+        const safePercent =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    Number(percent) || 0
+                )
+            );
+
+        statusPercent.textContent =
+            `${Math.round(safePercent)}%`;
+
+        progressBar.style.width =
+            `${safePercent}%`;
+
+    }
+
+
+    function setBusy(value) {
+
+        busy = value;
+
+        loadBtn.disabled =
+            value;
+
+    }
+
+
+    function setWorkspaceVisible(value) {
+
+        workspace.classList.toggle(
+            "active",
+            value
+        );
+
+    }
+
+
+    // =====================================================
+    // DRAWER
+    // =====================================================
+
+    function openDrawer() {
+
+        drawer.classList.add("open");
+
+        drawer.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+    }
+
+
+    function closeDrawerPanel() {
+
+        drawer.classList.remove("open");
+
+        drawer.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+
+    menuButton.addEventListener(
+        "click",
+        openDrawer
+    );
+
+
+    closeDrawer.addEventListener(
+        "click",
+        closeDrawerPanel
+    );
+
+
+    // =====================================================
+    // TIME
+    // =====================================================
+
+    function secondsToText(seconds) {
+
+        seconds =
+            Math.max(
+                0,
+                Math.round(
+                    Number(seconds) || 0
+                )
+            );
+
+        const hours =
+            Math.floor(
+                seconds / 3600
+            );
+
+        const minutes =
+            Math.floor(
+                (seconds % 3600) / 60
+            );
+
+        const secs =
+            seconds % 60;
+
+
+        if (hours > 0) {
+
+            return (
+                `${String(hours).padStart(2, "0")}:` +
+                `${String(minutes).padStart(2, "0")}:` +
+                `${String(secs).padStart(2, "0")}`
+            );
+
+        }
+
+
+        return (
+            `${String(minutes).padStart(2, "0")}:` +
+            `${String(secs).padStart(2, "0")}`
+        );
+
+    }
+
+
+    function textToSeconds(value) {
+
+        if (!value) {
+            return 0;
+        }
+
+        const clean =
+            value.trim();
+
+        const parts =
+            clean.split(":");
+
+
+        if (parts.length === 3) {
+
+            return (
+                Number(parts[0]) * 3600 +
+                Number(parts[1]) * 60 +
+                Number(parts[2])
+            );
+
+        }
+
+
+        if (parts.length === 2) {
+
+            return (
+                Number(parts[0]) * 60 +
+                Number(parts[1])
+            );
+
+        }
+
+
+        return Number(clean) || 0;
+
+    }
+
+
+    function clamp(
+        value,
+        min,
+        max
+    ) {
+
+        return Math.max(
+            min,
+            Math.min(
+                max,
+                value
+            )
+        );
+
+    }
+
+
+    function updateSelectionUI() {
+
+        const start =
+            Number(
+                startRange.value
+            );
+
+        const end =
+            Number(
+                endRange.value
+            );
+
+        const safeDuration =
+            duration || 1;
+
+
+        const left =
+            (start / safeDuration) * 100;
+
+
+        const width =
+            ((end - start) / safeDuration) * 100;
+
+
+        selectedTrack.style.left =
+            `${left}%`;
+
+
+        selectedTrack.style.width =
+            `${Math.max(0, width)}%`;
+
+
+        startTime.value =
+            secondsToText(start);
+
+
+        endTime.value =
+            secondsToText(end);
+
+
+        selectionLength.textContent =
+            secondsToText(
+                Math.max(
+                    0,
+                    end - start
+                )
+            );
+
+    }
+
+
+    function setStart(value) {
+
+        value =
+            clamp(
+                value,
+                0,
+                Math.max(
+                    0,
+                    duration
+                )
+            );
+
+
+        const end =
+            Number(
+                endRange.value
+            );
+
+
+        if (value >= end) {
+
+            value =
+                Math.max(
+                    0,
+                    end - 0.1
+                );
+
+        }
+
+
+        startRange.value =
+            value;
+
+
+        updateSelectionUI();
+
+    }
+
+
+    function setEnd(value) {
+
+        value =
+            clamp(
+                value,
+                0,
+                Math.max(
+                    0,
+                    duration
+                )
+            );
+
+
+        const start =
+            Number(
+                startRange.value
+            );
+
+
+        if (value <= start) {
+
+            value =
+                Math.min(
+                    duration,
+                    start + 0.1
+                );
+
+        }
+
+
+        endRange.value =
+            value;
+
+
+        updateSelectionUI();
+
+    }
+
+
+    startRange.addEventListener(
+        "input",
+        () => {
+
+            setStart(
+                Number(
+                    startRange.value
+                )
+            );
+
+        }
+    );
+
+
+    endRange.addEventListener(
+        "input",
+        () => {
+
+            setEnd(
+                Number(
+                    endRange.value
+                )
+            );
+
+        }
+    );
+
+
+    startTime.addEventListener(
+        "change",
+        () => {
+
+            setStart(
+                textToSeconds(
+                    startTime.value
+                )
+            );
+
+        }
+    );
+
+
+    endTime.addEventListener(
+        "change",
+        () => {
+
+            setEnd(
+                textToSeconds(
+                    endTime.value
+                )
+            );
+
+        }
+    );
+
+
+    document.querySelectorAll(
+        ".micro-buttons button"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const target =
+                        button.dataset.target;
+
+                    const delta =
+                        Number(
+                            button.dataset.delta
+                        );
+
+
+                    if (target === "start") {
+
+                        setStart(
+                            Number(
+                                startRange.value
+                            ) + delta
+                        );
+
+                    }
+
+
+                    if (target === "end") {
+
+                        setEnd(
+                            Number(
+                                endRange.value
+                            ) + delta
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // TOOL SWITCHING
+    // =====================================================
+
+    const panels = {
+
+        trim:
+            $("trimControls"),
+
+        video:
+            $("videoControls"),
+
+        audio:
+            $("audioControls"),
+
+        thumbnail:
+            $("thumbnailControls"),
+
+        captions:
+            $("captionsControls"),
+
+    };
+
+
+    function setMode(mode) {
+
+        currentMode =
+            mode;
+
+
+        document.querySelectorAll(
+            ".tool"
+        ).forEach(
+            (button) => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.mode === mode
+                );
+
+            }
+        );
+
+
+        Object.entries(panels).forEach(
+            ([key, panel]) => {
+
+                panel.classList.toggle(
+                    "hidden",
+                    key !== mode
+                );
+
+            }
+        );
+
+    }
+
+
+    document.querySelectorAll(
+        ".tool"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    setMode(
+                        button.dataset.mode
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // OPTIONS
+    // =====================================================
+
+    function selectOption(
+        selector,
+        selectedClass = "selected"
+    ) {
+
+        document.querySelectorAll(
+            selector
+        ).forEach(
+            (button) => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        document.querySelectorAll(
+                            selector
+                        ).forEach(
+                            (item) => {
+
+                                item.classList.remove(
+                                    selectedClass
+                                );
+
+                            }
+                        );
+
+
+                        button.classList.add(
+                            selectedClass
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    selectOption(
+        "[data-quality]"
+    );
+
+
+    selectOption(
+        "[data-video-format]"
+    );
+
+
+    selectOption(
+        "[data-full-quality]"
+    );
+
+
+    selectOption(
+        "[data-full-format]"
+    );
+
+
+    selectOption(
+        "[data-audio]"
+    );
+
+
+    selectOption(
+        "[data-thumb-format]"
+    );
+
+
+    selectOption(
+        "[data-caption-format]"
+    );
+
+
+    document.querySelectorAll(
+        "[data-quality]"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedQuality =
+                        button.dataset.quality;
+
+                }
+            );
+
+        }
+    );
+
+
+    document.querySelectorAll(
+        "[data-video-format]"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedVideoFormat =
+                        button.dataset.videoFormat;
+
+                }
+            );
+
+        }
+    );
+
+
+    document.querySelectorAll(
+        "[data-full-quality]"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    window.selectedFullQuality =
+                        button.dataset.fullQuality;
+
+                }
+            );
+
+        }
+    );
+
+
+    document.querySelectorAll(
+        "[data-full-format]"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    window.selectedFullFormat =
+                        button.dataset.fullFormat;
+
+                }
+            );
+
+        }
+    );
+
+
+    document.querySelectorAll(
+        "[data-audio]"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedAudioFormat =
+                        button.dataset.audio;
+
+                }
+            );
+
+        }
+    );
+
+
+    document.querySelectorAll(
+        "[data-thumb-format]"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedThumbnailFormat =
+                        button.dataset.thumbFormat;
+
+                }
+            );
+
+        }
+    );
+
+
+    document.querySelectorAll(
+        "[data-caption-format]"
+    ).forEach(
+        (button) => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedCaptionFormat =
+                        button.dataset.captionFormat;
+
+                }
+            );
+
+        }
+    );
+
+
+    window.selectedFullQuality =
+        "best";
+
+
+    window.selectedFullFormat =
+        "mp4";
+
+
+    // =====================================================
+    // FETCH JSON
+    // =====================================================
+
+    async function fetchJSON(
+        path,
+        params = {}
+    ) {
+
+        const response =
+            await fetch(
+                apiUrl(
+                    path,
+                    params
+                )
+            );
+
+
+        let data = null;
+
+
+        try {
+
+            data =
+                await response.json();
+
+        } catch {
+
+            data =
+                null;
+
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.detail ||
+                `Server error (${response.status})`
+            );
+
+        }
+
+
+        return data;
+
+    }
+
+
+    // =====================================================
+    // LOAD VIDEO
+    // =====================================================
+
+    async function loadVideo() {
+
+        if (busy) {
+            return;
+        }
+
+
+        const url =
+            urlInput.value.trim();
+
+
+        if (!url) {
+
+            showError(
+                "Paste a YouTube URL first."
+            );
+
+            return;
+
+        }
+
+
+        hideMessages();
+
+        setBusy(true);
+
+
+        setStatus(
+            "Loading video information...",
+            10
+        );
+
+
+        try {
+
+            const data =
+                await fetchJSON(
+                    "/api/info",
+                    {
+                        url
+                    }
+                );
+
+
+            currentVideo =
+                data;
+
+
+            duration =
+                Number(
+                    data.duration || 0
+                );
+
+
+            videoTitle.textContent =
+                data.title ||
+                "Unknown title";
+
+
+            videoChannel.textContent =
+                data.channel ||
+                data.uploader ||
+                "Unknown channel";
+
+
+            durationEl.textContent =
+                data.duration_text ||
+                secondsToText(
+                    duration
+                );
+
+
+            if (data.thumbnail) {
+
+                thumbnail.src =
+                    data.thumbnail;
+
+                thumbnail.alt =
+                    data.title ||
+                    "Video thumbnail";
+
+            } else {
+
+                thumbnail.removeAttribute(
+                    "src"
+                );
+
+            }
+
+
+            // =================================================
+            // YOUTUBE PREVIEW
+            // =================================================
+
+            const id =
+                data.id;
+
+
+            if (id) {
+
+                player.src =
+                    `https://www.youtube.com/embed/${encodeURIComponent(id)}?rel=0`;
+
+            }
+
+
+            // =================================================
+            // RANGE
+            // =================================================
+
+            startRange.max =
+                String(
+                    duration || 1
+                );
+
+
+            endRange.max =
+                String(
+                    duration || 1
+                );
+
+
+            startRange.value =
+                "0";
+
+
+            endRange.value =
+                String(
+                    duration || 1
+                );
+
+
+            updateSelectionUI();
+
+
+            // =================================================
+            // METADATA
+            // =================================================
+
+            const resolutions =
+                data.resolutions || [];
+
+
+            resolutionMeta.textContent =
+                resolutions.length
+                    ? `${resolutions.join("p, ")}p`
+                    : "Resolution unavailable";
+
+
+            const subtitleCount =
+                (
+                    data.subtitle_languages ||
+                    []
+                ).length;
+
+
+            const autoCount =
+                (
+                    data.auto_caption_languages ||
+                    []
+                ).length;
+
+
+            captionMeta.textContent =
+                `Captions: ${subtitleCount} • Auto: ${autoCount}`;
+
+
+            liveMeta.textContent =
+                data.is_live
+                    ? "LIVE"
+                    : "On-demand";
+
+
+            // =================================================
+            // CAPTION LANGUAGES
+            // =================================================
+
+            captionLanguage.innerHTML =
+                "";
+
+
+            const manual =
+                data.subtitle_languages ||
+                [];
+
+
+            const automatic =
+                data.auto_caption_languages ||
+                [];
+
+
+            const languages =
+                [
+                    ...new Set(
+                        [
+                            ...manual,
+                            ...automatic
+                        ]
+                    )
+                ];
+
+
+            if (!languages.length) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    "en";
+
+
+                option.textContent =
+                    "No captions available";
+
+
+                captionLanguage.appendChild(
+                    option
+                );
+
+            } else {
+
+                languages.forEach(
+                    (language) => {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        option.value =
+                            language;
+
+
+                        option.textContent =
+                            language;
+
+
+                        captionLanguage.appendChild(
+                            option
+                        );
+
+                    }
+                );
+
+            }
+
+
+            setWorkspaceVisible(
+                true
+            );
+
+
+            setStatus(
+                "Ready",
+                100
+            );
+
+
+            showSuccess(
+                "Video loaded successfully."
+            );
+
+        } catch (err) {
+
+            setStatus(
+                "Ready",
+                0
+            );
+
+
+            showError(
+                err.message ||
+                "Unable to load this video."
+            );
+
+        } finally {
+
+            setBusy(
+                false
+            );
+
+        }
+
+    }
+
+
+    loadBtn.addEventListener(
+        "click",
+        loadVideo
+    );
+
+
+    urlInput.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                loadVideo();
+
+            }
+
+        }
+    );
+
+
+    // =====================================================
+    // DOWNLOAD
+    // =====================================================
+
+    function requireVideo() {
+
+        if (!currentVideo) {
+
+            showError(
+                "Load a YouTube video first."
+            );
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }
+
+
+    async function downloadFile(
+        path,
+        params,
+        loadingMessage,
+        successMessage
+    ) {
+
+        if (busy) {
+            return;
+        }
+
+
+        setBusy(true);
+
+        hideMessages();
+
+
+        setStatus(
+            loadingMessage,
+            20
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    apiUrl(
+                        path,
+                        params
+                    )
+                );
+
+
+            if (!response.ok) {
+
+                let message =
+                    `Server error (${response.status})`;
+
+
+                try {
+
+                    const data =
+                        await response.json();
+
+
+                    if (data.detail) {
+
+                        message =
+                            data.detail;
+
+                    }
+
+                } catch {}
+
+
+                throw new Error(
+                    message
+                );
+
+            }
+
+
+            setStatus(
+                "Preparing download...",
+                70
+            );
+
+
+            const blob =
+                await response.blob();
+
+
+            let filename =
+                "clipforge-download";
+
+
+            const disposition =
+                response.headers.get(
+                    "Content-Disposition"
+                );
+
+
+            if (disposition) {
+
+                const match =
+                    disposition.match(
+                        /filename="?([^"]+)"?/i
+                    );
+
+
+                if (match) {
+
+                    filename =
+                        match[1];
+
+                }
+
+            }
+
+
+            const objectUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                objectUrl;
+
+
+            link.download =
+                filename;
+
+
+            document.body.appendChild(
+                link
+            );
+
+
+            link.click();
+
+
+            link.remove();
+
+
+            setTimeout(
+                () => {
+
+                    URL.revokeObjectURL(
+                        objectUrl
+                    );
+
+                },
+                5000
+            );
+
+
+            setStatus(
+                "Download ready",
+                100
+            );
+
+
+            showSuccess(
+                successMessage
+            );
+
+        } catch (err) {
+
+            setStatus(
+                "Ready",
+                0
+            );
+
+
+            showError(
+                err.message ||
+                "Download failed."
+            );
+
+        } finally {
+
+            setBusy(
+                false
+            );
+
+        }
+
+    }
+
+
+    // =====================================================
+    // CLIP DOWNLOAD
+    // =====================================================
+
+    $("clipBtn").addEventListener(
+        "click",
+        async () => {
+
+            if (!requireVideo()) {
+                return;
+            }
+
+
+            const start =
+                Number(
+                    startRange.value
+                );
+
+
+            const end =
+                Number(
+                    endRange.value
+                );
+
+
+            if (
+                !Number.isFinite(start) ||
+                !Number.isFinite(end) ||
+                end <= start
+            ) {
+
+                showError(
+                    "Choose a valid clip range."
+                );
+
+                return;
+
+            }
+
+
+            await downloadFile(
+                "/api/clip",
+                {
+                    url:
+                        urlInput.value.trim(),
+
+                    start,
+
+                    end,
+
+                    quality:
+                        selectedQuality,
+
+                    video_format:
+                        selectedVideoFormat
+                },
+                "Preparing your clip...",
+                "Your clip is ready."
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // FULL VIDEO
+    // =====================================================
+
+    $("videoDownloadBtn").addEventListener(
+        "click",
+        async () => {
+
+            if (!requireVideo()) {
+                return;
+            }
+
+
+            await downloadFile(
+                "/api/download-video",
+                {
+                    url:
+                        urlInput.value.trim(),
+
+                    quality:
+                        window.selectedFullQuality,
+
+                    video_format:
+                        window.selectedFullFormat
+                },
+                "Preparing full video...",
+                "Your video is ready."
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // AUDIO
+    // =====================================================
+
+    $("audioDownloadBtn").addEventListener(
+        "click",
+        async () => {
+
+            if (!requireVideo()) {
+                return;
+            }
+
+
+            const start =
+                Number(
+                    startRange.value
+                );
+
+
+            const end =
+                Number(
+                    endRange.value
+                );
+
+
+            await downloadFile(
+                "/api/audio",
+                {
+                    url:
+                        urlInput.value.trim(),
+
+                    start,
+
+                    end,
+
+                    audio_format:
+                        selectedAudioFormat
+                },
+                "Extracting audio...",
+                "Your audio file is ready."
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // THUMBNAIL
+    // =====================================================
+
+    $("thumbnailBtn").addEventListener(
+        "click",
+        async () => {
+
+            if (!requireVideo()) {
+                return;
+            }
+
+
+            await downloadFile(
+                "/api/download-thumbnail",
+                {
+                    url:
+                        urlInput.value.trim(),
+
+                    image_format:
+                        selectedThumbnailFormat
+                },
+                "Preparing thumbnail...",
+                "Your thumbnail is ready."
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // CAPTIONS
+    // =====================================================
+
+    $("captionBtn").addEventListener(
+        "click",
+        async () => {
+
+            if (!requireVideo()) {
+                return;
+            }
+
+
+            const language =
+                captionLanguage.value;
+
+
+            if (
+                !language ||
+                captionLanguage.options.length === 0
+            ) {
+
+                showError(
+                    "No caption language is available."
+                );
+
+                return;
+
+            }
+
+
+            await downloadFile(
+                "/api/captions",
+                {
+                    url:
+                        urlInput.value.trim(),
+
+                    language,
+
+                    caption_format:
+                        selectedCaptionFormat
+                },
+                "Preparing captions...",
+                "Your caption file is ready."
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // PREVIEW
+    // =====================================================
+
+    $("previewBtn").addEventListener(
+        "click",
+        () => {
+
+            if (!requireVideo()) {
+                return;
+            }
+
+
+            const start =
+                Number(
+                    startRange.value
+                );
+
+
+            const id =
+                currentVideo.id;
+
+
+            if (!id) {
+                return;
+            }
+
+
+            player.src =
+                `https://www.youtube.com/embed/${encodeURIComponent(id)}?start=${Math.floor(start)}&rel=0`;
+
+
+            showNotice(
+                `Preview starts at ${secondsToText(start)}.`
+            );
+
+        }
+    );
+
+
+    // =====================================================
+    // DRAWER ACTIONS
+    // =====================================================
+
+    $("copyUrlBtn").addEventListener(
+        "click",
+        async () => {
+
+            const value =
+                urlInput.value.trim();
+
+
+            if (!value) {
+
+                showError(
+                    "There is no video URL to copy."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    value
+                );
+
+
+                showSuccess(
+                    "Video URL copied."
+                );
+
+            } catch {
+
+                showError(
+                    "Could not copy the URL."
+                );
+
+            }
+
+
+            closeDrawerPanel();
+
+        }
+    );
+
+
+    $("resetBtn").addEventListener(
+        "click",
+        () => {
+
+            if (!currentVideo) {
+                return;
+            }
+
+
+            startRange.value =
+                "0";
+
+
+            endRange.value =
+                String(
+                    duration
+                );
+
+
+            updateSelectionUI();
+
+
+            showSuccess(
+                "Clip reset to the full video."
+            );
+
+
+            closeDrawerPanel();
+
+        }
+    );
+
+
+    $("openYoutubeBtn").addEventListener(
+        "click",
+        () => {
+
+            if (!currentVideo?.webpage_url) {
+
+                showError(
+                    "Load a video first."
+                );
+
+                return;
+
+            }
+
+
+            window.open(
+                currentVideo.webpage_url,
+                "_blank",
+                "noopener,noreferrer"
+            );
+
+
+            closeDrawerPanel();
+
+        }
+    );
+
+
+    $("clearBtn").addEventListener(
+        "click",
+        () => {
+
+            currentVideo =
+                null;
+
+
+            duration =
+                0;
+
+
+            urlInput.value =
+                "";
+
+
+            player.src =
+                "";
+
+
+            thumbnail.removeAttribute(
+                "src"
+            );
+
+
+            videoTitle.textContent =
+                "—";
+
+
+            videoChannel.textContent =
+                "—";
+
+
+            durationEl.textContent =
+                "00:00";
+
+
+            resolutionMeta.textContent =
+                "—";
+
+
+            captionMeta.textContent =
+                "—";
+
+
+            liveMeta.textContent =
+                "—";
+
+
+            startRange.max =
+                "1";
+
+
+            endRange.max =
+                "1";
+
+
+            startRange.value =
+                "0";
+
+
+            endRange.value =
+                "1";
+
+
+            updateSelectionUI();
+
+
+            setWorkspaceVisible(
+                false
+            );
+
+
+            hideMessages();
+
+
+            setStatus(
+                "Ready",
+                0
+            );
+
+
+            closeDrawerPanel();
+
+        }
+    );
+
+
+    // =====================================================
+    // KEYBOARD SHORTCUTS
+    // =====================================================
+
+    document.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.target.tagName ===
+                    "INPUT" ||
+                event.target.tagName ===
+                    "TEXTAREA" ||
+                event.target.tagName ===
+                    "SELECT"
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                event.key ===
+                "ArrowLeft"
+            ) {
+
+                setStart(
+                    Number(
+                        startRange.value
+                    ) - 1
+                );
+
+
+                event.preventDefault();
+
+            }
+
+
+            if (
+                event.key ===
+                "ArrowRight"
+            ) {
+
+                setStart(
+                    Number(
+                        startRange.value
+                    ) + 1
+                );
+
+
+                event.preventDefault();
+
+            }
+
+
+            if (
+                event.code ===
+                "Space"
+            ) {
+
+                event.preventDefault();
+
+
+                $("previewBtn").click();
+
+            }
+
+        }
+    );
+
+
+    // =====================================================
+    // INITIAL STATE
+    // =====================================================
+
+    setMode(
+        "trim"
+    );
+
+
+    setWorkspaceVisible(
+        false
+    );
+
+
+    setStatus(
+        "Ready",
+        0
+    );
+
+})();
+</script>
+
+</body>
+</html>
