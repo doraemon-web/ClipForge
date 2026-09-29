@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +10,7 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html, body {
       margin: 0;
       width: 100%;
       height: 100%;
@@ -28,6 +26,8 @@
     }
 
     .loader {
+      width: 90%;
+      max-width: 420px;
       text-align: center;
     }
 
@@ -50,6 +50,13 @@
     .status {
       color: #aaa;
       font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .retry {
+      margin-top: 10px;
+      color: #666;
+      font-size: 13px;
     }
 
     @keyframes spin {
@@ -64,43 +71,108 @@
 
   <div class="loader">
     <div class="logo">ClipForge</div>
+
     <div class="spinner"></div>
-    <div class="status" id="status">Connecting...</div>
+
+    <div class="status" id="status">
+      Checking server...
+    </div>
+
+    <div class="retry" id="retry">
+      Please wait...
+    </div>
   </div>
 
   <script>
     const URL_FILE =
       "https://raw.githubusercontent.com/doraemon-web/ClipForge/main/tunnel-url.txt";
 
-    async function findClipForge() {
-      try {
-        const response = await fetch(URL_FILE + "?t=" + Date.now(), {
+    const RETRY_DELAY = 5000;
+
+    async function getTunnelURL() {
+      const response = await fetch(
+        URL_FILE + "?t=" + Date.now(),
+        {
           cache: "no-store"
-        });
-
-        if (!response.ok) {
-          throw new Error("URL unavailable");
         }
+      );
 
-        const url = (await response.text()).trim();
+      if (!response.ok) {
+        throw new Error("Tunnel URL unavailable");
+      }
 
-        if (
-          url.startsWith("https://") &&
-          url.includes(".trycloudflare.com")
-        ) {
-          document.getElementById("status").textContent =
-            "Opening ClipForge...";
+      const url = (await response.text()).trim();
 
-          window.location.replace(url);
+      if (
+        !url.startsWith("https://") ||
+        !url.includes(".trycloudflare.com")
+      ) {
+        throw new Error("Invalid tunnel URL");
+      }
+
+      return url;
+    }
+
+    async function checkServer(url) {
+      try {
+        const controller = new AbortController();
+
+        const timeout = setTimeout(() => {
+          controller.abort();
+        }, 5000);
+
+        const response = await fetch(
+          url + "/login?t=" + Date.now(),
+          {
+            method: "GET",
+            cache: "no-store",
+            mode: "cors",
+            signal: controller.signal
+          }
+        );
+
+        clearTimeout(timeout);
+
+        return response.ok;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    async function findClipForge() {
+      const status = document.getElementById("status");
+      const retry = document.getElementById("retry");
+
+      try {
+        status.textContent = "Checking server...";
+        retry.textContent = "Please wait...";
+
+        const url = await getTunnelURL();
+
+        status.textContent = "Checking ClipForge...";
+        retry.textContent = "Connecting to server...";
+
+        const online = await checkServer(url);
+
+        if (online) {
+          status.textContent = "Server online";
+          retry.textContent = "Opening ClipForge...";
+
+          setTimeout(() => {
+            window.location.replace(url);
+          }, 300);
+
           return;
         }
 
-        throw new Error("Invalid URL");
-      } catch (error) {
-        document.getElementById("status").textContent =
-          "ClipForge is offline. Retrying...";
+        throw new Error("Server is offline");
 
-        setTimeout(findClipForge, 3000);
+      } catch (error) {
+        status.textContent = "Server is down";
+        retry.textContent =
+          "We'll try to reconnect in 5 seconds...";
+
+        setTimeout(findClipForge, RETRY_DELAY);
       }
     }
 
