@@ -1,1 +1,111 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipForge</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #080808;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .loader {
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 20px;
+      border: 3px solid #292929;
+      border-top-color: #ff3030;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .status {
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="loader">
+    <div class="logo">ClipForge</div>
+    <div class="spinner"></div>
+    <div class="status" id="status">Connecting...</div>
+  </div>
+
+  <script>
+    const URL_FILE =
+      "https://raw.githubusercontent.com/doraemon-web/ClipForge/main/tunnel-url.txt";
+
+    async function findClipForge() {
+      try {
+        const response = await fetch(URL_FILE + "?t=" + Date.now(), {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error("URL unavailable");
+        }
+
+        const url = (await response.text()).trim();
+
+        if (
+          url.startsWith("https://") &&
+          url.includes(".trycloudflare.com")
+        ) {
+          document.getElementById("status").textContent =
+            "Opening ClipForge...";
+
+          window.location.replace(url);
+          return;
+        }
+
+        throw new Error("Invalid URL");
+      } catch (error) {
+        document.getElementById("status").textContent =
+          "ClipForge is offline. Retrying...";
+
+        setTimeout(findClipForge, 3000);
+      }
+    }
+
+    findClipForge();
+  </script>
+
+</body>
+</html>
