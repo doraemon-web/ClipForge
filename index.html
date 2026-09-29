@@ -10,7 +10,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       width: 100%;
       height: 100%;
@@ -87,96 +88,71 @@
     const URL_FILE =
       "https://raw.githubusercontent.com/doraemon-web/ClipForge/main/tunnel-url.txt";
 
+    const STATUS_FILE =
+      "https://raw.githubusercontent.com/doraemon-web/ClipForge/main/server-status.txt";
+
     const RETRY_DELAY = 5000;
 
-    async function getTunnelURL() {
+    async function getGitHubFile(url) {
       const response = await fetch(
-        URL_FILE + "?t=" + Date.now(),
+        url + "?t=" + Date.now(),
         {
           cache: "no-store"
         }
       );
 
       if (!response.ok) {
-        throw new Error("Tunnel URL unavailable");
+        throw new Error("GitHub file unavailable");
       }
 
-      const url = (await response.text()).trim();
-
-      if (
-        !url.startsWith("https://") ||
-        !url.includes(".trycloudflare.com")
-      ) {
-        throw new Error("Invalid tunnel URL");
-      }
-
-      return url;
+      return (await response.text()).trim();
     }
 
-    async function checkServer(url) {
-      try {
-        const controller = new AbortController();
-
-        const timeout = setTimeout(() => {
-          controller.abort();
-        }, 5000);
-
-        const response = await fetch(
-          url + "/login?t=" + Date.now(),
-          {
-            method: "GET",
-            cache: "no-store",
-            mode: "cors",
-            signal: controller.signal
-          }
-        );
-
-        clearTimeout(timeout);
-
-        return response.ok;
-      } catch (error) {
-        return false;
-      }
-    }
-
-    async function findClipForge() {
-      const status = document.getElementById("status");
-      const retry = document.getElementById("retry");
+    async function checkServer() {
+      const statusElement = document.getElementById("status");
+      const retryElement = document.getElementById("retry");
 
       try {
-        status.textContent = "Checking server...";
-        retry.textContent = "Please wait...";
+        statusElement.textContent = "Checking server...";
+        retryElement.textContent = "Please wait...";
 
-        const url = await getTunnelURL();
+        const status = await getGitHubFile(STATUS_FILE);
 
-        status.textContent = "Checking ClipForge...";
-        retry.textContent = "Connecting to server...";
+        if (status !== "ONLINE") {
+          statusElement.textContent = "Server is down";
+          retryElement.textContent =
+            "We'll try to reconnect in 5 seconds...";
 
-        const online = await checkServer(url);
-
-        if (online) {
-          status.textContent = "Server online";
-          retry.textContent = "Opening ClipForge...";
-
-          setTimeout(() => {
-            window.location.replace(url);
-          }, 300);
-
+          setTimeout(checkServer, RETRY_DELAY);
           return;
         }
 
-        throw new Error("Server is offline");
+        statusElement.textContent = "Server online";
+        retryElement.textContent = "Opening ClipForge...";
+
+        const url = await getGitHubFile(URL_FILE);
+
+        if (
+          !url.startsWith("https://") ||
+          !url.includes(".trycloudflare.com")
+        ) {
+          throw new Error("Invalid tunnel URL");
+        }
+
+        setTimeout(() => {
+          window.location.replace(url);
+        }, 300);
 
       } catch (error) {
-        status.textContent = "Server is down";
-        retry.textContent =
+        statusElement.textContent = "Server is down";
+        retryElement.textContent =
           "We'll try to reconnect in 5 seconds...";
 
-        setTimeout(findClipForge, RETRY_DELAY);
+        setTimeout(checkServer, RETRY_DELAY);
       }
     }
 
-    findClipForge();
+    checkServer();
   </script>
 
 </body>
