@@ -7,6 +7,15 @@
 
   <style>
     * {
+      box-sizing: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipForge</title>
+
+  <style>
+    * {
       box-sizing: border-box;
     }
 
@@ -28,20 +37,21 @@
 
     .loader {
       width: 90%;
-      max-width: 420px;
+      max-width: 430px;
       text-align: center;
     }
 
     .logo {
       font-size: 32px;
       font-weight: 700;
-      margin-bottom: 28px;
+      margin-bottom: 30px;
+      letter-spacing: -0.5px;
     }
 
     .spinner {
-      width: 32px;
-      height: 32px;
-      margin: 0 auto 20px;
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 22px;
       border: 3px solid #292929;
       border-top-color: #ff3030;
       border-radius: 50%;
@@ -50,14 +60,33 @@
 
     .status {
       color: #aaa;
-      font-size: 15px;
+      font-size: 16px;
       line-height: 1.5;
     }
 
     .retry {
-      margin-top: 10px;
+      margin-top: 9px;
       color: #666;
       font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background: #777;
+      vertical-align: middle;
+    }
+
+    .online {
+      background: #4caf50;
+    }
+
+    .offline {
+      background: #ff3030;
     }
 
     @keyframes spin {
@@ -71,9 +100,10 @@
 <body>
 
   <div class="loader">
+
     <div class="logo">ClipForge</div>
 
-    <div class="spinner"></div>
+    <div class="spinner" id="spinner"></div>
 
     <div class="status" id="status">
       Checking server...
@@ -82,6 +112,7 @@
     <div class="retry" id="retry">
       Please wait...
     </div>
+
   </div>
 
   <script>
@@ -93,7 +124,21 @@
 
     const RETRY_DELAY = 5000;
 
-    async function getGitHubFile(url) {
+    let redirecting = false;
+
+    function setStatus(message, retryMessage, state) {
+      const status = document.getElementById("status");
+      const retry = document.getElementById("retry");
+      const spinner = document.getElementById("spinner");
+
+      status.textContent = message;
+      retry.textContent = retryMessage;
+
+      spinner.style.display =
+        state === "online" ? "none" : "block";
+    }
+
+    async function readFile(url) {
       const response = await fetch(
         url + "?t=" + Date.now(),
         {
@@ -102,35 +147,82 @@
       );
 
       if (!response.ok) {
-        throw new Error("GitHub file unavailable");
+        throw new Error("File unavailable");
       }
 
       return (await response.text()).trim();
     }
 
-    async function checkServer() {
-      const statusElement = document.getElementById("status");
-      const retryElement = document.getElementById("retry");
+    async function checkClipForge() {
+
+      if (redirecting) {
+        return;
+      }
 
       try {
-        statusElement.textContent = "Checking server...";
-        retryElement.textContent = "Please wait...";
 
-        const status = await getGitHubFile(STATUS_FILE);
+        setStatus(
+          "Checking server...",
+          "Please wait...",
+          "checking"
+        );
 
-        if (status !== "ONLINE") {
-          statusElement.textContent = "Server is down";
-          retryElement.textContent =
-            "We'll try to reconnect in 5 seconds...";
+        const serverStatus = await readFile(STATUS_FILE);
 
-          setTimeout(checkServer, RETRY_DELAY);
+        const status = serverStatus.toUpperCase();
+
+        /*
+         * SERVER STARTING
+         */
+        if (status === "STARTING") {
+
+          setStatus(
+            "Starting ClipForge...",
+            "We'll check again in 5 seconds...",
+            "starting"
+          );
+
+          setTimeout(checkClipForge, RETRY_DELAY);
           return;
         }
 
-        statusElement.textContent = "Server online";
-        retryElement.textContent = "Opening ClipForge...";
+        /*
+         * SERVER OFFLINE
+         */
+        if (status === "OFFLINE") {
 
-        const url = await getGitHubFile(URL_FILE);
+          setStatus(
+            "Server is down",
+            "We'll try to reconnect in 5 seconds...",
+            "offline"
+          );
+
+          setTimeout(checkClipForge, RETRY_DELAY);
+          return;
+        }
+
+        /*
+         * UNKNOWN STATUS
+         *
+         * Don't redirect.
+         * Don't immediately declare the server dead.
+         */
+        if (status !== "ONLINE") {
+
+          setStatus(
+            "Checking server...",
+            "We'll check again in 5 seconds...",
+            "checking"
+          );
+
+          setTimeout(checkClipForge, RETRY_DELAY);
+          return;
+        }
+
+        /*
+         * SERVER IS ONLINE
+         */
+        const url = await readFile(URL_FILE);
 
         if (
           !url.startsWith("https://") ||
@@ -139,20 +231,38 @@
           throw new Error("Invalid tunnel URL");
         }
 
+        redirecting = true;
+
+        setStatus(
+          "Server online",
+          "Opening ClipForge...",
+          "online"
+        );
+
         setTimeout(() => {
           window.location.replace(url);
-        }, 300);
+        }, 500);
 
       } catch (error) {
-        statusElement.textContent = "Server is down";
-        retryElement.textContent =
-          "We'll try to reconnect in 5 seconds...";
 
-        setTimeout(checkServer, RETRY_DELAY);
+        /*
+         * GitHub hasn't updated yet,
+         * or the file is temporarily unavailable.
+         *
+         * Don't send the user to an old URL.
+         */
+
+        setStatus(
+          "Checking server...",
+          "We'll try again in 5 seconds...",
+          "checking"
+        );
+
+        setTimeout(checkClipForge, RETRY_DELAY);
       }
     }
 
-    checkServer();
+    checkClipForge();
   </script>
 
 </body>
